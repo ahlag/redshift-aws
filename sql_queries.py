@@ -62,8 +62,8 @@ CREATE TABLE songplays(
     start_time TIMESTAMP,
     user_id VARCHAR(50),
     level VARCHAR(50),
-    song_id VARCHAR(100),
-    artist_id VARCHAR(100),
+    song_id VARCHAR(100) NOT NULL,
+    artist_id VARCHAR(100) NOT NULL,
     session_id BIGINT,
     location VARCHAR(255),
     user_agent TEXT,
@@ -130,7 +130,7 @@ staging_songs_copy = ("""copy staging_songs
 
 songplay_table_insert = ("""
 INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent) 
-SELECT  
+SELECT DISTINCT 
     TIMESTAMP 'epoch' + e.ts/1000 * interval '1 second' as start_time, 
     e.user_id, 
     e.user_level, 
