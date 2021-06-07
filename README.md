@@ -73,7 +73,7 @@ I created a star schema optimized for queries on song play analysis. This includ
 + **time** - timestamps of records in **songplays** broken down into specific units
 
 The database schema is shown as follows
-![schema](./images/schema.PNG)
+![schema](./images/schema.png)
 
 ## Build ETL Pipeline
 
