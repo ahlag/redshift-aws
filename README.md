@@ -4,17 +4,20 @@ A music streaming startup, Sparkify, has grown their user base and song database
 
 As their data engineer, you are tasked with building an ETL pipeline that extracts their data from S3, stages them in Redshift, and transforms data into a set of dimensional tables for their analytics team to continue finding insights in what songs their users are listening to. You'll be able to test your database and ETL pipeline by running queries given to you by the analytics team from Sparkify and compare your results with their expected results.
 
-**_Task is to build an ETL Pipeline that extracts their data from S3, staging it in Redshift and then transforming data into a set of Dimensional and Fact Tables for their Analytics Team to continue finding Insights to what songs their users are listening to._**
 
-**Project Description**
+## Project Description
 
-Application of Data warehouse and AWS to build an ETL Pipeline for a database hosted on Redshift Will need to load data from S3 to staging tables on Redshift and execute SQL Statements that create fact and dimension tables from these staging tables to create analytics
+In this project, you'll apply what you've learned on data warehouses and AWS to build an ETL pipeline for a database hosted on Redshift. To complete the project, you will need to load data from S3 to staging tables on Redshift and execute SQL statements that create the analytics tables from these staging tables.
 
-**Project Datasets**
+## Project Datasets
 
-Song Data Path     -->     s3://udacity-dend/song_data
-Log Data Path      -->     s3://udacity-dend/log_data
-Log Data JSON Path -->     s3://udacity-dend/log_json_path.json
+Datasets used in this project are provided in two public S3 buckets. One bucket contains info about songs and artists, the second bucket has info concerning actions done by users (which song are listening, etc.. ). The objects contained in both buckets are JSON files.
+
+The Redshift service is where data will be ingested and transformed, in fact though COPY command we will access to the JSON files inside the buckets and copy their content on our staging tables.
+
+Song data: s3://udacity-dend/song_data
+Log data: s3://udacity-dend/log_data
+Log data json path: s3://udacity-dend/log_json_path.json
 
 **Song Dataset**
 
@@ -75,14 +78,28 @@ Project Template include four files:
 
 **4. README.md** is where you'll provide discussion on your process and decisions for this ETL pipeline.
 
-**Create Table Schema**
+### Database Schema
+We have two staging tables which *copy* the JSON file inside the  **S3 buckets**.
 
-1. Write a SQL CREATE statement for each of these tables in sql_queries.py
-2. Complete the logic in create_tables.py to connect to the database and create these tables
-3. Write SQL DROP statements to drop tables in the beginning of create_tables.py if the tables already exist. This way, you can run create_tables.py whenever you want to reset your database and test your ETL pipeline.
-4. Launch a redshift cluster and create an IAM role that has read access to S3.
-5. Add redshift database and IAM role info to dwh.cfg.
-6. Test by running create_tables.py and checking the table schemas in your redshift database.
+#### Staging Table 
++ **staging_songs** - info about songs and artists
++ **staging_events** - actions done by users (which song are listening, etc.. )
+
+
+I createa a star schema optimized for queries on song play analysis. This includes the following tables.
+
+#### Fact Table 
++ **songplays** - records in event data associated with song plays i.e. records with page `NextSong`
+
+#### Dimension Tables
++ **users** - users in the app
++ **songs** - songs in music database
++ **artists** - artists in music database
++ **time** - timestamps of records in **songplays** broken down into specific units
+
+
+The database schema is shown as follows
+![schema](./images/schema.PNG)
 
 **Build ETL Pipeline**
 
@@ -91,18 +108,8 @@ Project Template include four files:
 3. Test by running etl.py after running create_tables.py and running the analytic queries on your Redshift database to compare your results with the expected results.
 4. Delete your redshift cluster when finished.
 
-**Final Instructions**
+### How to Run
 
-1. Import all the necessary libraries.
-2. Write the configuration of AWS Cluster, store the important parameter in some other file
-3. Configuration of boto3 which is an AWS SDK for Python
-4. Using the bucket, can check whether files log files and song data files are present
-5. Create an IAM User Role, Assign appropriate permissions and create the Redshift Cluster
-6. Get the Value of Endpoint and Role for put into main configuration file
-7. Authorize Security Access Group to Default TCP/IP Address
-8. Launch database connectivity configuration
-9. Go to Terminal write the command "python create_tables.py" and then "etl.py"
-10. Should take around 4-10 minutes in total
-11. Then you go back to jupyter notebook to test everything is working fine
-12. I counted all the records in my tables
-13. Now can delete the cluster, roles and assigned permission
+1. Create tables by running `create_tables.py`.
+
+2. Execute ETL process by running `etl.py`.
